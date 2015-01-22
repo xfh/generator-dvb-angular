@@ -61,9 +61,7 @@ CgangularGenerator.prototype.askFor = function askFor() {
         {
             name: 'dir',
             message: 'Where would you like to create the main module?',
-            default: function () {
-                return path.sep;
-            },
+            default: '.',
             validate: function (value) {
                 value = _.str.trim(value);
                 if (_.isEmpty(value)) {
