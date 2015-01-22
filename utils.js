@@ -99,7 +99,7 @@ exports.injectRoute = function(moduleFile,uirouter,name,route,routeUrl,that){
 
 };
 
-exports.getParentModule = function(dir){
+exports.getParentModule = function(that, dir){
     //starting this dir, find the first module and return parsed results
     if (fs.existsSync(dir)) {
         var files = fs.readdirSync(dir);
@@ -115,26 +115,44 @@ exports.getParentModule = function(dir){
     }
 
     if (fs.existsSync(path.join(dir,'.yo-rc.json'))) {
-        //if we're in the root of the project then bail
-        return;
+        //if we're in the root of the project then get the primary module
+        var primary = that.config.get('primaryModule')
+        var modules = that.config.get('modules');
+        var module;
+        for (var i = 0; i < modules.length; i++) {
+            if (primary === modules[i].name) {
+                module = modules[i];
+                break;
+            }
+        }
+
+        //if the primary module does not exist in the config file then bail
+        if (!module) {
+            return;
+        }
+
+        //return whatever comes back
+        return ngParseModule.parse(module.file);
     }
 
     return exports.getParentModule(path.join(dir,'..'));
 };
 
 exports.askForModule = function(type,that,cb){
-
+    var primary = that.config.get('primaryModule');
     var modules = that.config.get('modules');
-    var mainModule = ngParseModule.parse('app.js');
-    mainModule.primary = true;
 
     if (!modules || modules.length === 0) {
-        cb.bind(that)(mainModule);
+        return;
+    }
+
+    if (modules.length === 1) {
+        cb.bind(that)(ngParseModule.parse(modules[0].file));
         return;
     }
 
     var choices = _.pluck(modules,'name');
-    choices.unshift(mainModule.name + ' (Primary Application Module)');
+    choices[0] += ' (Primary Application Module)';
 
     var prompts = [
         {
@@ -147,20 +165,9 @@ exports.askForModule = function(type,that,cb){
     ];
 
     that.prompt(prompts, function (props) {
-
         var i = choices.indexOf(props.module);
-
-        var module;
-
-        if (i === 0) {
-            module = mainModule;
-        } else {
-            module = ngParseModule.parse(modules[i-1].file);
-        }
-
-        cb.bind(that)(module);
+        cb.bind(that)(ngParseModule.parse(modules[i].file));
     }.bind(that));
-
 };
 
 exports.askForDir = function(type,that,module,ownDir,cb){
@@ -188,12 +195,10 @@ exports.askForDir = function(type,that,module,ownDir,cb){
             message:'Where would you like to create the '+type+' files?',
             default: defaultDir,
             validate: function(dir){
-                if (!module.primary) {
-                    //ensure dir is in module dir or subdir of it
-                    dir = path.resolve(dir);
-                    if (path.relative(that.dir,dir).substring(0,2) === '..') {
-                        return 'Files must be placed inside the module directory or a subdirectory of the module.'
-                    }
+                //ensure dir is in module dir or subdir of it
+                dir = path.resolve(dir);
+                if (path.relative(that.dir,dir).substring(0,2) === '..') {
+                    return 'Files must be placed inside the module directory or a subdirectory of the module.'
                 }
                 return true;
             }
@@ -266,3 +271,13 @@ exports.addNamePrompt = function(that,prompts,type){
         });
     }
 }
+
+exports.getPrimaryModule = function(that) {
+    var primary = that.config.get('primaryModule');
+    var modules = that.config.get('modules');
+    for (var i = 0; i < modules.length; i++) {
+        if (modules[i].name === primary) {
+            return modules[i];
+        }
+    }
+};

@@ -36,7 +36,7 @@ gulp.task('clean', function() {
 });
 
 gulp.task('css', ['clean'], function() {
-    return gulp.src('app.less')
+    return gulp.src('<%= appLess =>')
         .pipe(less())
         .pipe(cssmin({keepSpecialComments: 0}))
         .pipe(rename('app.full.min.css'))

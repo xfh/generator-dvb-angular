@@ -84,3 +84,39 @@ Notice that there is now no beginning "$routeProvider." above the comment marker
     /* Add New Routes Above */
     $routeProvider.otherwise({redirectTo:'/home'});
 ```
+
+Upgrading from v3.2 to v3.3
+-------------
+1.  Modify your `.yo-rc.json` file to look like the following.  The only changes are in the `modules` section and the `primaryModule`.  If you already have a `modules` section, simply add the content below.
+
+```js
+{
+    "generator-cg-angular": {
+        "uirouter": false,
+        "partialDirectory": "partial/",
+        "directiveDirectory": "directive/",
+        "serviceDirectory": "service/",
+        "filterDirectory": "filter/",
+        "inject": {
+            "js": {
+                "file": "index.html",
+                "marker": "<!-- Add New Component JS Above -->",
+                "template": "<script src=\"<%= filename %>\"></script>"
+            },
+            "less": {
+                "relativeToModule": true,
+                "file": "<%= module %>.less",
+                "marker": "/* Add Component LESS Above */",
+                "template": "@import \"<%= filename %>\";"
+            }
+        },
+        "primaryModule": "app",         //<------------- Put your primary angular module name here 
+        "modules": [
+            {
+                "name": "app",          //<------------- Put your primary angular module name here 
+                "file": "app.js"        //<------------- Put the path to your primary JS file here
+            }
+        ]
+    }
+}
+```
