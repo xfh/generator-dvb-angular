@@ -96,12 +96,12 @@ CgangularGenerator.prototype.askForUiRouter = function askFor() {
     this.prompt(prompts, function (props) {
         if (props.router === 'Angular UI Router') {
             this.uirouter = true;
-            this.routerJs = 'bower_components/angular-ui-router/release/angular-ui-router.js';
+            this.routerJs = 'angular-ui-router/release/angular-ui-router.js';
             this.routerModuleName = 'ui.router';
             this.routerViewDirective = 'ui-view';
         } else {
             this.uirouter = false;
-            this.routerJs = 'bower_components/angular-route/angular-route.js';
+            this.routerJs = 'angular-route/angular-route.js';
             this.routerModuleName = 'ngRoute';
             this.routerViewDirective = 'ng-view';
         }
