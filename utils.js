@@ -116,15 +116,7 @@ exports.getParentModule = function(that, dir){
 
     if (fs.existsSync(path.join(dir,'.yo-rc.json'))) {
         //if we're in the root of the project then get the primary module
-        var primary = that.config.get('primaryModule')
-        var modules = that.config.get('modules');
-        var module;
-        for (var i = 0; i < modules.length; i++) {
-            if (primary === modules[i].name) {
-                module = modules[i];
-                break;
-            }
-        }
+        var module = exports.getPrimaryModule(that);
 
         //if the primary module does not exist in the config file then bail
         if (!module) {
