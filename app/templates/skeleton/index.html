@@ -4,7 +4,7 @@
   <title></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
-  <link href="app.less" type="text/css" rel="stylesheet/less">
+  <link href="<%= appLess %>" type="text/css" rel="stylesheet/less">
 </head>
 <body>
 
@@ -18,7 +18,7 @@
   <script src="bower_components/underscore/underscore.js"></script>
   <script src="bower_components/moment/moment.js"></script>
   <script src="bower_components/angular/angular.js"></script>
-  <script src="<%= routerJs %>"></script>
+  <script src="bower_components/<%= routerJs %>"></script>
   <script src="bower_components/angular-animate/angular-animate.js"></script>
   <script src="bower_components/angular-resource/angular-resource.js"></script>
   <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
@@ -27,7 +27,7 @@
 
 
   <!-- Main App JS -->
-  <script src="app.js"></script>
+  <script src="<%= appJs %>"></script>
   <!-- Add New Component JS Above -->
 
   <div>
