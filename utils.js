@@ -7,11 +7,11 @@ _.mixin(_.str.exports());
 var ngParseModule = require('ng-parse-module');
 
 
-exports.JS_MARKER = "<!-- Add New Component JS Above -->";
-exports.LESS_MARKER = "/* Add Component LESS Above */";
+exports.JS_MARKER = '<!-- Add New Component JS Above -->';
+exports.LESS_MARKER = '/* Add Component LESS Above */';
 
-exports.ROUTE_MARKER = "/* Add New Routes Above */";
-exports.STATE_MARKER = "/* Add New States Above */";
+exports.ROUTE_MARKER = '/* Add New Routes Above */';
+exports.STATE_MARKER = '/* Add New States Above */';
 
 exports.addToFile = function(filename,lineToAdd,beforeMarker){
     try {
@@ -21,7 +21,7 @@ exports.addToFile = function(filename,lineToAdd,beforeMarker){
         var indexOf = fileSrc.indexOf(beforeMarker);
         var lineStart = fileSrc.substring(0,indexOf).lastIndexOf('\n') + 1;
         var indent = fileSrc.substring(lineStart,indexOf);
-        fileSrc = fileSrc.substring(0,indexOf) + lineToAdd + "\n" + indent + fileSrc.substring(indexOf);
+        fileSrc = fileSrc.substring(0,indexOf) + lineToAdd + '\n' + indent + fileSrc.substring(indexOf);
 
         fs.writeFileSync(fullPath,fileSrc);
     } catch(e) {
@@ -32,7 +32,7 @@ exports.addToFile = function(filename,lineToAdd,beforeMarker){
 exports.processTemplates = function(name,dir,type,that,defaultDir,configName,module){
 
     if (!defaultDir) {
-        defaultDir = 'templates'
+        defaultDir = 'templates';
     }
     if (!configName) {
         configName = type + 'Templates';
