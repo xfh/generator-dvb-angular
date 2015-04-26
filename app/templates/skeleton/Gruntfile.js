@@ -2,33 +2,7 @@
 'use strict';
 
 var pkg = require('./package.json');
-
-//Using exclusion patterns slows down Grunt significantly
-//instead of creating a set of patterns like '**/*.js' and '!**/node_modules/**'
-//this method is used to create a set of inclusive patterns for all subdirectories
-//skipping node_modules, bower_components, dist, and any .dirs
-//This enables users to create any directory structure they desire.
-var createFolderGlobs = function(fileTypePatterns) {
-  fileTypePatterns = Array.isArray(fileTypePatterns) ? fileTypePatterns : [fileTypePatterns];
-  var ignore = ['node_modules','bower_components','dist','temp'];
-  var fs = require('fs');
-  return fs.readdirSync(process.cwd())
-          .map(function(file){
-            if (ignore.indexOf(file) !== -1 ||
-                file.indexOf('.') === 0 ||
-                !fs.lstatSync(file).isDirectory()) {
-              return null;
-            } else {
-              return fileTypePatterns.map(function(pattern) {
-                return file + '/**/' + pattern;
-              });
-            }
-          })
-          .filter(function(patterns){
-            return patterns;
-          })
-          .concat(fileTypePatterns);
-};
+var globs = require('./globbing-util.js');
 
 module.exports = function (grunt) {
 
@@ -51,7 +25,7 @@ module.exports = function (grunt) {
             livereloadOnError: false,
             spawn: false
         },
-        files: [createFolderGlobs(['*.js','*.less','*.html']),'!_SpecRunner.html','!.grunt'],
+        files: [globs.createFolderGlobs(['*.js','*.less','*.html']),'!_SpecRunner.html','!.grunt'],
         tasks: [] //all the tasks are run dynamically during the watch event handler
       }
     },
@@ -60,7 +34,7 @@ module.exports = function (grunt) {
         options: {
             jshintrc: '.jshintrc'
         },
-        src: createFolderGlobs('*.js')
+        src: globs.createFolderGlobs('*.js')
       }
     },
     clean: {
@@ -86,7 +60,7 @@ module.exports = function (grunt) {
             module: pkg.name,
             htmlmin:'<%%= htmlmin.main.options %>'
         },
-        src: [createFolderGlobs('*.html'),'!index.html','!_SpecRunner.html'],
+        src: [globs.createFolderGlobs('*.html'),'!index.html','!_SpecRunner.html'],
         dest: 'temp/templates.js'
       }
     },
@@ -182,9 +156,9 @@ module.exports = function (grunt) {
       options: {
         frameworks: ['jasmine'],
         files: [  //this files data is also updated in the watch handler, if updated change there too
-          '<%%= dom_munger.data.appjs %>',
+          '<%%= dom_munger.data.appjs %>', // TODO flatten dom_munger.data.appjs for Karma Versions > 0.8.*
           'bower_components/angular-mocks/angular-mocks.js',
-          createFolderGlobs('*-spec.js')
+            globs.createFolderGlobs('*-spec.js')
         ],
         logLevel:'ERROR',
         reporters:['mocha'],
