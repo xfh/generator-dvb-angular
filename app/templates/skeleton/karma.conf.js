@@ -5,6 +5,10 @@
 module.exports = function (config) {
     var wiredep = require('wiredep');
     var globs = require('./globbing-util.js');
+    var yo = require('./.yo-rc.json');
+    var modules = yo["generator-cg-angular"].modules.map(function (module) {
+        return module.file;
+    });
     config.set({
 
         // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -20,7 +24,7 @@ module.exports = function (config) {
         files: globs.flattenArrayOfArrays(
             [
                 wiredep({devDependencies: true})['js'],
-                '<%= appJs %>', // appJs must be listed first
+                modules, // modules must be listed first
                 globs.createFolderGlobs('*.js')
             ], []
         ),
