@@ -1,11 +1,18 @@
-describe('<%= _.camelize(name) %>', function() {
+describe('<%= _.camelize(name) %>', function () {
 
-  beforeEach(module('<%= appname %>'));
+    var <%= _.camelize(name) %>;
 
-  it('should ...', inject(function(<%= _.camelize(name) %>) {
+    beforeEach(module('<%= appname %>'));
 
-    //expect(<%= _.camelize(name) %>.doSomething()).toEqual('something');
+    beforeEach(inject(function (_<%= _.camelize(name) %>_) {
+    <%= _.camelize(name) %> = _<%= _.camelize(name) %>_;
+    }));
 
-  }));
+    describe('Public API', function () {
 
+    });
+
+    describe('API Usage', function () {
+
+    });
 });

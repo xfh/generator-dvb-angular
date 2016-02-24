@@ -1,6 +1,18 @@
-angular.module('<%= appname %>').factory('<%= _.camelize(name) %>',function() {
+(function () {
+    'use strict';
 
-    var <%= _.camelize(name) %> = {};
+    angular.module('<%= appname %>').factory('<%= _.camelize(name) %>', <%= _.camelize(name) %>);
 
-    return <%= _.camelize(name) %>;
-});
+    function <%= _.camelize(name) %>() {
+
+        //noinspection UnnecessaryLocalVariableJS
+        var srv = {
+            // Public API
+        };
+
+        return srv;
+
+        ////////////
+
+    }
+})();
