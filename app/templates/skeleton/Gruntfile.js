@@ -27,6 +27,19 @@ module.exports = function (grunt) {
                 },
                 files: [globs.createFolderGlobs(['*.js', '*.less', '*.html']), '!_SpecRunner.html', '!.grunt'],
                 tasks: [] //all the tasks are run dynamically during the watch event handler
+            },
+            less: {
+                files: [globs.createFolderGlobs(['*.less'])],
+                tasks: ['less:development'],
+                options: {
+                    spawn: true
+                }
+            },
+            css: {
+                files: ['temp/app.css'],
+                options: {
+                    livereload: true
+                }
             }
         },
         jshint: {
@@ -59,6 +72,14 @@ module.exports = function (grunt) {
                 options: {},
                 files: {
                     'temp/app.css': '<%= appLess %>'
+                }
+            },
+            development: {
+                options: {
+                    rootpath: '../' // because app.css is storead in a nested folder
+                },
+                files: {
+                    'temp/app.css': '<%= appLess %>' // destination file and source file
                 }
             }
         },
@@ -182,8 +203,8 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('build', ['jshint', 'jscs', 'clean:before', 'less', 'dom_munger', 'ngtemplates', 'cssmin', 'concat', 'ngAnnotate', 'uglify', 'copy', 'htmlmin', 'clean:after']);
-    grunt.registerTask('serve', ['dom_munger:read', 'jshint', 'jscs', 'connect', 'watch']);
+    grunt.registerTask('build', ['jshint', 'jscs', 'clean:before', 'less:production', 'dom_munger', 'ngtemplates', 'cssmin', 'concat', 'ngAnnotate', 'uglify', 'copy', 'htmlmin', 'clean:after']);
+    grunt.registerTask('serve', ['dom_munger:read', 'jshint', 'jscs', 'connect', 'less:development', 'watch']);
     grunt.registerTask('test', ['dom_munger:read', 'karma:all_tests']);
 
     grunt.event.on('watch', function (action, filepath) {
