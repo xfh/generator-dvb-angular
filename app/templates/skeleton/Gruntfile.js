@@ -37,6 +37,15 @@ module.exports = function (grunt) {
         src: globs.createFolderGlobs('*.js')
       }
     },
+    jscs: {
+      options: {
+          config: '.jscsrc',
+          verbose: false // If you need output with rule names http://jscs.info/overview.html#verbose
+      },
+      main: {
+          src: [globs.createFolderGlobs('*.js')]
+      }
+    },
     clean: {
       before:{
         src:['dist','temp']
@@ -174,8 +183,8 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','clean:after']);
-  grunt.registerTask('serve', ['dom_munger:read','jshint','connect', 'watch']);
+  grunt.registerTask('build',['jshint','jscs','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','clean:after']);
+  grunt.registerTask('serve', ['dom_munger:read','jshint','jscs','connect', 'watch']);
   grunt.registerTask('test',['dom_munger:read','karma:all_tests']);
 
   grunt.event.on('watch', function(action, filepath) {
@@ -188,6 +197,8 @@ module.exports = function (grunt) {
       //lint the changed js file
       grunt.config('jshint.main.src', filepath);
       tasksToRun.push('jshint');
+      grunt.config('jscs.main.src', filepath);
+      tasksToRun.push('jscs:main');
 
       //find the appropriate unit test for the changed file
       var spec = filepath;
