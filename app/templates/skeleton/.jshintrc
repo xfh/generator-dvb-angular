@@ -56,7 +56,6 @@
         "$": false,
         "inject": false,
         "module": false,
-        "moment": false,
         "getJSONFixture": false,
         "browser": false,
         "element": false,

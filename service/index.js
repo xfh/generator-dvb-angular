@@ -14,11 +14,11 @@ var ServiceGenerator = module.exports = function ServiceGenerator(args, options,
 
     cgUtils.getNameArg(this,args);
 
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
 };
 
-util.inherits(ServiceGenerator, yeoman.generators.Base);
+util.inherits(ServiceGenerator, yeoman.Base);
 
 ServiceGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
@@ -32,7 +32,7 @@ ServiceGenerator.prototype.askFor = function askFor() {
             this.name = props.name;
         }
         cgUtils.askForModuleAndDir('service',this,false,cb);
-    }.bind(this));     
+    }.bind(this));
 
 };
 

@@ -12,11 +12,11 @@ var ModalGenerator = module.exports = function ModalGenerator(args, options, con
 
     cgUtils.getNameArg(this,args);
 
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
 };
 
-util.inherits(ModalGenerator, yeoman.generators.Base);
+util.inherits(ModalGenerator, yeoman.Base);
 
 ModalGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
@@ -30,7 +30,7 @@ ModalGenerator.prototype.askFor = function askFor() {
             this.name = props.name;
         }
         cgUtils.askForModuleAndDir('modal',this,true,cb);
-    }.bind(this)); 
+    }.bind(this));
 
 };
 

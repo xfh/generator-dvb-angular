@@ -27,7 +27,7 @@ The new v3.0 generator has moved some files, made small changes how script tags 
                 "file": "index.html",
                 "marker": "<!-- Add New Component JS Above -->",
                 "template": "<script src=\"<%= filename %>\"></script>"
-            },
+            },'yeoman-generator').Base
             "less": {
                 "file": "app.less",
                 "marker": "/* Add Component LESS Above */",
@@ -110,10 +110,10 @@ Upgrading from v3.2 to v3.3
                 "template": "@import \"<%= filename %>\";"
             }
         },
-        "primaryModule": "app",         //<------------- Put your primary angular module name here 
+        "primaryModule": "app",         //<------------- Put your primary angular module name here
         "modules": [
             {
-                "name": "app",          //<------------- Put your primary angular module name here 
+                "name": "app",          //<------------- Put your primary angular module name here
                 "file": "app.js"        //<------------- Put the path to your primary JS file here
             }
         ]
