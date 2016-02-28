@@ -1,31 +1,31 @@
 {
-  "name": "generator-cg-angular",
-  "version": "3.2.0",
+  "name": "generator-dvb-angular",
+  "version": "1.0.0",
   "description": "Yeoman Generator for Enterprise Angular projects.",
   "keywords": [
     "yeoman-generator",
     "angular"
   ],
-  "homepage": "https://github.com/cgross/generator-cg-angular",
-  "bugs": "https://github.com/cgross/generator-cg-angular/issues",
+  "homepage": "https://github.com/xfh/generator-dvb-angular",
+  "bugs": "https://github.com/xfh/generator-dvb-angular/issues",
   "author": {
-    "name": "Chris Gross",
-    "email": "schtoo@schtoo.com",
-    "url": "https://github.com/cgross"
+    "name": "Fabio Heer",
+    "email": "fabio.heer@dvbern.ch",
+    "url": "https://github.com/xfh"
   },
   "main": "app/index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/cgross/generator-cg-angular.git"
+    "url": "git://github.com/xfh/generator-dvb-angular.git"
   },
   "scripts": {
     "test": "mocha"
   },
   "dependencies": {
-    "underscore": "~1.5",
-    "underscore.string": "~2.3",
-    "yeoman-generator": "~0.16",
-    "chalk": "~0.4.0",
+    "underscore": "~1.8",
+    "underscore.string": "~3.3",
+    "yeoman-generator": "~0.22",
+    "chalk": "~1.1",
     "ng-parse-module": "~0.1.0"
   },
   "devDependencies": {
