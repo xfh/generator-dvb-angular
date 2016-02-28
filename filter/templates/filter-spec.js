@@ -1,13 +1,12 @@
-describe('<%= _.camelize(name) %>', function() {
+describe('<%= _.camelize(name) %>', function () {
 
     beforeEach(module('<%= appname %>'));
 
-    it('should ...', inject(function($filter) {
+    describe('<%= _.camelize(name) %>', function () {
+        var filter;
 
-        var filter = $filter('<%= _.camelize(name) %>');
-
-        expect(filter('input')).toEqual('output');
-
-    }));
-
+        beforeEach(inject(function (_$filter_) {
+            filter = _$filter_('<%= _.camelize(name) %>');
+        }));
+    });
 });

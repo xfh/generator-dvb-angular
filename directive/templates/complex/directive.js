@@ -15,8 +15,8 @@
             bindToController: true,
             link: function (scope, element, attrs, ctrl) {
 
-        }
-    };
+            }
+        };
 
         return directive;
 
