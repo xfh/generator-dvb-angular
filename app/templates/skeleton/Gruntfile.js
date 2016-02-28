@@ -97,11 +97,11 @@ module.exports = function (grunt) {
             main: {
                 files: [
                     {src: ['img/**'], dest: 'dist/'},
-                    {src: ['bower_components/font-awesome/fonts/**'], dest: 'dist/', filter: 'isFile', expand: true},
-                    {src: ['bower_components/bootstrap/fonts/**'], dest: 'dist/', filter: 'isFile', expand: true}
-                    //{src: ['bower_components/angular-ui-utils/ui-utils-ieshiv.min.js'], dest: 'dist/'},
-                    //{src: ['bower_components/select2/*.png','bower_components/select2/*.gif'], dest:'dist/css/',flatten:true,expand:true},
-                    //{src: ['bower_components/angular-mocks/angular-mocks.js'], dest: 'dist/'}
+                    {src: ['node_modules/font-awesome/fonts/**'], dest: 'dist/', filter: 'isFile', expand: true},
+                    {src: ['node_modules/bootstrap/fonts/**'], dest: 'dist/', filter: 'isFile', expand: true}
+                    //{src: ['node_modules/angular-ui-utils/ui-utils-ieshiv.min.js'], dest: 'dist/'},
+                    //{src: ['node_modules/select2/*.png','node_modules/select2/*.gif'], dest:'dist/css/',flatten:true,expand:true},
+                    //{src: ['node_modules/angular-mocks/angular-mocks.js'], dest: 'dist/'}
                 ]
             }
         },
@@ -186,7 +186,7 @@ module.exports = function (grunt) {
                 frameworks: ['jasmine'],
                 files: [  //this files data is also updated in the watch handler, if updated change there too
                     '<%%= dom_munger.data.appjs %>', // TODO flatten dom_munger.data.appjs for Karma Versions > 0.8.*
-                    'bower_components/angular-mocks/angular-mocks.js',
+                    'node_modules/angular-mocks/angular-mocks.js',
                     globs.createFolderGlobs('*-spec.js')
                 ],
                 logLevel: 'ERROR',
@@ -229,7 +229,7 @@ module.exports = function (grunt) {
             //if the spec exists then lets run it
             if (grunt.file.exists(spec)) {
                 var files = [].concat(grunt.config('dom_munger.data.appjs'));
-                files.push('bower_components/angular-mocks/angular-mocks.js');
+                files.push('node_modules/angular-mocks/angular-mocks.js');
                 files.push(spec);
                 grunt.config('karma.options.files', files);
                 tasksToRun.push('karma:during_watch');

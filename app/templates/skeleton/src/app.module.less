@@ -1,11 +1,12 @@
-@bower: ~"<%= bowerDir %>";
+@nodeModules: ~"<%= nodeModulesDir %>";
 
-@import "@{bower}/bootstrap/less/bootstrap.less";
-//@import "@{bower}/bootstrap/less/theme.less";
-@import "@{bower}/font-awesome/less/font-awesome.less";
-@fa-font-path: "@{bower}/font-awesome/fonts";
+@import "@{nodeModules}/bootstrap/less/bootstrap.less";
+//@import "@{nodeModules}/bootstrap/less/theme.less";
+@import "@{nodeModules}/font-awesome/less/font-awesome.less";
+@fa-font-path: "@{nodeModules}/font-awesome/fonts";
 
 /* Component LESS */
+@import "core/core.module.less";
 /* Add Component LESS Above */
 
 /* Required for Angular UI Bootstrap */

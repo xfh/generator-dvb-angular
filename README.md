@@ -12,7 +12,6 @@ Features
 * Provides a ready-made Grunt build that produces an extremely optimized distribution.
    * Build uses [grunt-ng-annotate](https://github.com/olov/ng-annotate) so you don't have to use the Angular injection syntax for safe minification (i.e. you dont need `$inject` or `(['$scope','$http',...`.
    * `grunt serve` task allows you to run a simple development server with watch/livereload enabled.  Additionally, JSHint and the appropriate unit tests are run for the changed files.
-* Integrates Bower for package management
 * Includes Yeoman subgenerators for directives, services, partials, filters, and modules.
 * Integrates LESS and includes Bootstrap via the source LESS files allowing you to reuse Bootstrap vars/mixins/etc.
 * Easily Testable - Each sub-generator creates a skeleton unit test.  Unit tests can be run via `grunt test` and they run automatically during the grunt watch that is active during `grunt serve`.
@@ -59,15 +58,14 @@ In this example, the user has chosen to group the app into an `admin` folder, a 
         my-service2-spec.js ........ example service unit test
     /img ........................... images (not created by default but included in /dist if added)
     /dist .......................... distributable version of app built using grunt and Gruntfile.js
-    /bower_component................ 3rd party libraries managed by bower
     /node_modules .................. npm managed libraries used by grunt
 
 Getting Started
 -------------
 
-Prerequisites: Node, Grunt, Yeoman, and Bower.  Once Node is installed, do:
+Prerequisites: Node, Grunt, Yeoman.  Once Node is installed, do:
 
-    npm install -g grunt-cli yo bower
+    npm install -g grunt-cli yo
 
 Next, install this generator:
 
