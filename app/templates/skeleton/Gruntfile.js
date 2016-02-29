@@ -9,6 +9,18 @@ module.exports = function (grunt) {
     // load all grunt tasks
     require('load-grunt-tasks')(grunt);
 
+    var distFiles = [{
+        expand: true,
+        cwd: 'dist/',
+        src: '**'
+    }];
+    var projectFiles = [{
+        expand: true,
+        cwd: './',
+        dot: true, // include hidden files
+        src: ['**', '!build/**', '!dist/**', '!.idea/**', '!.git/**']
+    }];
+
     // Project configuration.
     grunt.initConfig({
         connect: {
@@ -24,7 +36,7 @@ module.exports = function (grunt) {
             dev: {
                 proxies: [
                     {
-                        context: '/kitadmin',
+                        context: '/NAME_YOUR_API_HERE', // FIXME
                         host: 'localhost',
                         port: 8080,
                         https: false,
@@ -38,6 +50,7 @@ module.exports = function (grunt) {
             devBackend: {
                 proxies: [
                     {
+                        // example setup
                         context: '/kitadmin',
                         host: 'kita-dev.dvbern.ch',
                         port: 80, // use Application published via Apache
@@ -137,9 +150,6 @@ module.exports = function (grunt) {
                     {src: ['img/**'], dest: 'dist/'},
                     {src: ['node_modules/font-awesome/fonts/**'], dest: 'dist/', filter: 'isFile', expand: true},
                     {src: ['node_modules/bootstrap/fonts/**'], dest: 'dist/', filter: 'isFile', expand: true}
-                    //{src: ['node_modules/angular-ui-utils/ui-utils-ieshiv.min.js'], dest: 'dist/'},
-                    //{src: ['node_modules/select2/*.png','node_modules/select2/*.gif'], dest:'dist/css/',flatten:true,expand:true},
-                    //{src: ['node_modules/angular-mocks/angular-mocks.js'], dest: 'dist/'}
                 ]
             }
         },
@@ -230,13 +240,96 @@ module.exports = function (grunt) {
                 logLevel: 'ERROR',
                 reporters: ['mocha'],
                 autoWatch: false, //watching is handled by grunt-contrib-watch
-                singleRun: true
+                singleRun: true,
+                preprocessors: {
+                    'src/**/*.html': 'ng-html2js'
+                },
+                colors: true
             },
             all_tests: {
                 browsers: ['PhantomJS', 'Chrome', 'Firefox']
             },
             during_watch: {
                 browsers: ['PhantomJS']
+            },
+            jenkins: {
+                browsers: ['PhantomJS'],
+                reporters: ['mocha', 'junit', 'coverage'],
+                preprocessors: {
+                    'src/**/*.html': 'ng-html2js',
+                    'src/**/*': ['coverage']
+                },
+                junitReporter: {
+                    outputFile: 'build/karma-results.xml',
+                    useBrowserName: false
+                },
+                coverageReporter: {
+                    type: 'cobertura',
+                    dir: 'build/coverage',
+                    subdir: '.'
+                },
+                client: {
+                    useIframe: false //to avoid phantomjs detect failure
+                }
+            }
+        },
+        maven_deploy: { // jshint ignore:line
+            options: {
+                groupId: '<%= groupId =>',
+                artifactId: '<=% artifactId =>',
+                packaging: 'tgz',
+                version: pkg.version,
+                goal: 'deploy'
+            },
+            snapshot_src: { // jshint ignore:line
+                options: {
+                    url: 'http://nexus/nexus/content/repositories/dvb.snapshots/',
+                    repositoryId: 'dvb.snapshots',
+                    classifier: 'sources',
+                    file: function () {
+                        return 'build/<=% artifactId =>-' + pkg.version + '-src.tgz';
+                    }
+                },
+                files: projectFiles
+            },
+            snapshot_dist: { // jshint ignore:line
+                options: {
+                    url: 'http://nexus/nexus/content/repositories/dvb.snapshots/',
+                    repositoryId: 'dvb.snapshots',
+                    file: function () {
+                        return 'build/<=% artifactId =>-' + pkg.version + '-dist.tgz';
+                    }
+                },
+                files: distFiles
+            },
+            release_src: { // jshint ignore:line
+                options: {
+                    url: 'http://nexus/nexus/content/repositories/dvb/',
+                    repositoryId: 'dvb',
+                    classifier: 'sources',
+                    file: function () {
+                        return 'build/<=% artifactId =>-' + pkg.version + '-src.tgz';
+                    }
+                },
+                files: projectFiles
+            },
+            release_dist: { // jshint ignore:line
+                options: {
+                    url: 'http://nexus/nexus/content/repositories/dvb/',
+                    repositoryId: 'dvb',
+                    file: function () {
+                        return 'build/<=% artifactId =>-' + pkg.version + '-dist.tgz';
+                    }
+                },
+                files: distFiles
+            }
+        },
+        jsdoc: {
+            dist: {
+                src: [globs.createFolderGlobs('*.js')],
+                options: {
+                    destination: 'build/doc'
+                }
             }
         }
     });
@@ -245,6 +338,11 @@ module.exports = function (grunt) {
     grunt.registerTask('serve', ['dom_munger:read', 'jshint', 'jscs', 'configureProxies:dev', 'connect:dev', 'less:development', 'watch']);
     grunt.registerTask('serve-backend', ['dom_munger:read', 'jshint', 'jscs', 'configureProxies:devBackend', 'connect:devBackend', 'less:development', 'watch']);
     grunt.registerTask('test', ['dom_munger:read', 'karma:all_tests']);
+    grunt.registerTask('doc', ['jsdoc']);
+    grunt.registerTask('jenkins-test', ['jshint', 'jscs', 'karma:jenkins']);
+    grunt.registerTask('jenkins-build', ['clean:before', 'jshint', 'jscs', 'less:production', 'dom_munger:read', 'karma:jenkins', 'dom_munger', 'ngtemplates', 'cssmin', 'concat', 'ngAnnotate', 'uglify', 'copy', 'htmlmin', 'clean:after']);
+    grunt.registerTask('jenkins-deploy-snapshot', ['jenkins-build', 'maven_deploy:snapshot_dist']);
+    grunt.registerTask('jenkins-deploy-release', ['jenkins-build', 'maven_deploy:release_dist']);
 
     grunt.event.on('watch', function (action, filepath) {
         //https://github.com/gruntjs/grunt-contrib-watch/issues/156

@@ -3,7 +3,6 @@
 
 // Karma configuration
 module.exports = function (config) {
-    var wiredep = require('wiredep');
     var globs = require('./globbing-util.js');
     var yo = require('./.yo-rc.json');
     var modules = yo["generator-cg-angular"].modules.map(function (module) {
@@ -23,7 +22,7 @@ module.exports = function (config) {
         // list of files / patterns to load in the browser
         files: globs.flattenArrayOfArrays(
             [
-                wiredep({devDependencies: true})['js'],
+                // FIXME angular dependencies
                 modules, // modules must be listed first
                 globs.createFolderGlobs('*.js')
             ], []
