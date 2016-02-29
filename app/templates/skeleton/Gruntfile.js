@@ -12,10 +12,42 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         connect: {
-            main: {
-                options: {
-                    port: 9001
+            options: {
+                port: 9001,
+                hostname: 'localhost', // '*' verwenden um remote auf den Server zuzugreifen
+                //hostname: '*',
+                middleware: function (connect, options, middlewares) {
+                    var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
+                    return [proxy].concat(middlewares);
                 }
+            },
+            dev: {
+                proxies: [
+                    {
+                        context: '/kitadmin',
+                        host: 'localhost',
+                        port: 8080,
+                        https: false,
+                        xforward: false,
+                        headers: {
+                            'Connection': 'close'
+                        }
+                    }
+                ]
+            },
+            devBackend: {
+                proxies: [
+                    {
+                        context: '/kitadmin',
+                        host: 'kita-dev.dvbern.ch',
+                        port: 80, // use Application published via Apache
+                        https: false,
+                        xforward: false,
+                        headers: {
+                            'Connection': 'close'
+                        }
+                    }
+                ]
             }
         },
         watch: {
@@ -204,7 +236,8 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('build', ['jshint', 'jscs', 'clean:before', 'less:production', 'dom_munger', 'ngtemplates', 'cssmin', 'concat', 'ngAnnotate', 'uglify', 'copy', 'htmlmin', 'clean:after']);
-    grunt.registerTask('serve', ['dom_munger:read', 'jshint', 'jscs', 'connect', 'less:development', 'watch']);
+    grunt.registerTask('serve', ['dom_munger:read', 'jshint', 'jscs', 'configureProxies:dev', 'connect:dev', 'less:development', 'watch']);
+    grunt.registerTask('serve-backend', ['dom_munger:read', 'jshint', 'jscs', 'configureProxies:devBackend', 'connect:devBackend', 'less:development', 'watch']);
     grunt.registerTask('test', ['dom_munger:read', 'karma:all_tests']);
 
     grunt.event.on('watch', function (action, filepath) {
