@@ -51,13 +51,15 @@ module.exports = function (grunt) {
             }
         },
         watch: {
+            options: {
+                spawn: false
+            },
             main: {
                 options: {
                     livereload: true,
-                    livereloadOnError: false,
-                    spawn: false
+                    livereloadOnError: false
                 },
-                files: [globs.createFolderGlobs(['*.js', '*.less', '*.html']), '!_SpecRunner.html', '!.grunt'],
+                files: [globs.createFolderGlobs(['*.js', '*.html']), '!_SpecRunner.html', '!.grunt'],
                 tasks: [] //all the tasks are run dynamically during the watch event handler
             },
             less: {
@@ -75,17 +77,21 @@ module.exports = function (grunt) {
             }
         },
         jshint: {
+            options: {
+                jshintrc: '.jshintrc',
+                reporter: 'checkstyle',
+                reporterOutput: 'build/checkstyle-result.xml'
+            },
             main: {
-                options: {
-                    jshintrc: '.jshintrc'
-                },
-                src: globs.createFolderGlobs('*.js')
+                src: [globs.createFolderGlobs('*.js')]
             }
         },
         jscs: {
             options: {
                 config: '.jscsrc',
-                verbose: false // If you need output with rule names http://jscs.info/overview.html#verbose
+                verbose: false, // If you need output with rule names http://jscs.info/overview.html#verbose
+                reporter: 'junit',
+                reporterOutput: 'build/jscs-results.xml'
             },
             main: {
                 src: [globs.createFolderGlobs('*.js')]
@@ -93,7 +99,7 @@ module.exports = function (grunt) {
         },
         clean: {
             before: {
-                src: ['dist', 'temp']
+                src: ['dist', 'temp', 'build']
             },
             after: {
                 src: ['temp']
