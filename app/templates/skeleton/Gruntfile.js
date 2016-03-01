@@ -9,11 +9,6 @@ module.exports = function (grunt) {
     // load all grunt tasks
     require('load-grunt-tasks')(grunt);
 
-    var distFiles = [{
-        expand: true,
-        cwd: 'dist/',
-        src: '**'
-    }];
     var projectFiles = [{
         expand: true,
         cwd: './',
@@ -26,8 +21,9 @@ module.exports = function (grunt) {
         connect: {
             options: {
                 port: 9001,
-                hostname: 'localhost', // '*' verwenden um remote auf den Server zuzugreifen
-                //hostname: '*',
+                base: 'src/',
+                hostname: 'localhost',
+                //hostname: '*', // enable to allow remote access to this server
                 middleware: function (connect, options, middlewares) {
                     var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
                     return [proxy].concat(middlewares);
@@ -36,24 +32,9 @@ module.exports = function (grunt) {
             dev: {
                 proxies: [
                     {
-                        context: '/NAME_YOUR_API_HERE', // FIXME
+                        context: '<%= proxyContext %>',
                         host: 'localhost',
                         port: 8080,
-                        https: false,
-                        xforward: false,
-                        headers: {
-                            'Connection': 'close'
-                        }
-                    }
-                ]
-            },
-            devBackend: {
-                proxies: [
-                    {
-                        // example setup
-                        context: '/kitadmin',
-                        host: 'kita-dev.dvbern.ch',
-                        port: 80, // use Application published via Apache
                         https: false,
                         xforward: false,
                         headers: {
@@ -91,22 +72,27 @@ module.exports = function (grunt) {
         },
         jshint: {
             options: {
-                jshintrc: '.jshintrc',
-                reporter: 'checkstyle',
-                reporterOutput: 'build/checkstyle-result.xml'
+                jshintrc: '.jshintrc'
             },
             main: {
                 src: [globs.createFolderGlobs('*.js')]
+            },
+            jenkins: {
+                reporter: 'checkstyle',
+                reporterOutput: 'build/checkstyle-result.xml'
             }
         },
         jscs: {
             options: {
                 config: '.jscsrc',
-                verbose: false, // If you need output with rule names http://jscs.info/overview.html#verbose
-                reporter: 'junit',
-                reporterOutput: 'build/jscs-results.xml'
+                verbose: false // If you need output with rule names http://jscs.info/overview.html#verbose
             },
             main: {
+                src: [globs.createFolderGlobs('*.js')]
+            },
+            jenkins: {
+                reporter: 'junit',
+                reporterOutput: 'build/jscs-results.xml',
                 src: [globs.createFolderGlobs('*.js')]
             }
         },
@@ -122,15 +108,15 @@ module.exports = function (grunt) {
             production: {
                 options: {},
                 files: {
-                    'temp/app.css': '<%= appLess %>'
+                    'temp/app.css': 'src/<%= appLess %>'
                 }
             },
             development: {
                 options: {
-                    rootpath: '../' // because app.css is storead in a nested folder
+                    rootpath: '../' // because app.css is served from a nested folder
                 },
                 files: {
-                    'temp/app.css': '<%= appLess %>' // destination file and source file
+                    'temp/app.css': 'src/<%= appLess %>' // destination file and source file
                 }
             }
         },
@@ -147,13 +133,12 @@ module.exports = function (grunt) {
         copy: {
             main: {
                 files: [
-                    {src: ['img/**'], dest: 'dist/'},
                     {src: ['node_modules/font-awesome/fonts/**'], dest: 'dist/', filter: 'isFile', expand: true},
                     {src: ['node_modules/bootstrap/fonts/**'], dest: 'dist/', filter: 'isFile', expand: true}
                 ]
             }
         },
-        dom_munger: {
+        dom_munger: { // jshint ignore:line
             read: {
                 options: {
                     read: [
@@ -161,7 +146,7 @@ module.exports = function (grunt) {
                         {selector: 'link[rel="stylesheet"][data-concat!="false"]', attribute: 'href', writeto: 'appcss'}
                     ]
                 },
-                src: 'index.html'
+                src: 'src/index.html'
             },
             update: {
                 options: {
@@ -171,7 +156,7 @@ module.exports = function (grunt) {
                         {selector: 'head', html: '<link rel="stylesheet" href="app.full.min.css">'}
                     ]
                 },
-                src: 'index.html',
+                src: 'src/index.html',
                 dest: 'dist/index.html'
             }
         },
@@ -246,8 +231,9 @@ module.exports = function (grunt) {
                 },
                 colors: true
             },
-            all_tests: {
-                browsers: ['PhantomJS', 'Chrome', 'Firefox']
+            all_tests: { // jshint ignore:line
+                browsers: ['PhantomJS', 'Chrome']
+                //browsers: ['PhantomJS', 'Chrome', 'Firefox']
             },
             during_watch: {
                 browsers: ['PhantomJS']
@@ -275,22 +261,11 @@ module.exports = function (grunt) {
         },
         maven_deploy: { // jshint ignore:line
             options: {
-                groupId: '<%= groupId =>',
-                artifactId: '<=% artifactId =>',
+                groupId: '<%= groupId %>',
+                artifactId: '<=% artifactId %>',
                 packaging: 'tgz',
                 version: pkg.version,
                 goal: 'deploy'
-            },
-            snapshot_src: { // jshint ignore:line
-                options: {
-                    url: 'http://nexus/nexus/content/repositories/dvb.snapshots/',
-                    repositoryId: 'dvb.snapshots',
-                    classifier: 'sources',
-                    file: function () {
-                        return 'build/<=% artifactId =>-' + pkg.version + '-src.tgz';
-                    }
-                },
-                files: projectFiles
             },
             snapshot_dist: { // jshint ignore:line
                 options: {
@@ -300,18 +275,7 @@ module.exports = function (grunt) {
                         return 'build/<=% artifactId =>-' + pkg.version + '-dist.tgz';
                     }
                 },
-                files: distFiles
-            },
-            release_src: { // jshint ignore:line
-                options: {
-                    url: 'http://nexus/nexus/content/repositories/dvb/',
-                    repositoryId: 'dvb',
-                    classifier: 'sources',
-                    file: function () {
-                        return 'build/<=% artifactId =>-' + pkg.version + '-src.tgz';
-                    }
-                },
-                files: projectFiles
+                files: [{expand: true, cwd: 'dist/', src: '**'}]
             },
             release_dist: { // jshint ignore:line
                 options: {
@@ -321,7 +285,7 @@ module.exports = function (grunt) {
                         return 'build/<=% artifactId =>-' + pkg.version + '-dist.tgz';
                     }
                 },
-                files: distFiles
+                files: [{expand: true, cwd: 'dist/', src: '**'}]
             }
         },
         jsdoc: {
@@ -334,13 +298,11 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('build', ['jshint', 'jscs', 'clean:before', 'less:production', 'dom_munger', 'ngtemplates', 'cssmin', 'concat', 'ngAnnotate', 'uglify', 'copy', 'htmlmin', 'clean:after']);
-    grunt.registerTask('serve', ['dom_munger:read', 'jshint', 'jscs', 'configureProxies:dev', 'connect:dev', 'less:development', 'watch']);
-    grunt.registerTask('serve-backend', ['dom_munger:read', 'jshint', 'jscs', 'configureProxies:devBackend', 'connect:devBackend', 'less:development', 'watch']);
+    grunt.registerTask('build', ['clean:before', 'jshint:main', 'jscs:main', 'less:production', 'dom_munger', 'ngtemplates', 'cssmin', 'concat', 'ngAnnotate', 'uglify', 'copy', 'htmlmin', 'clean:after']);
+    grunt.registerTask('serve', ['dom_munger:read', 'jshint:main', 'jscs:main', 'configureProxies:dev', 'connect:dev', 'less:development', 'watch']);
     grunt.registerTask('test', ['dom_munger:read', 'karma:all_tests']);
     grunt.registerTask('doc', ['jsdoc']);
-    grunt.registerTask('jenkins-test', ['jshint', 'jscs', 'karma:jenkins']);
-    grunt.registerTask('jenkins-build', ['clean:before', 'jshint', 'jscs', 'less:production', 'dom_munger:read', 'karma:jenkins', 'dom_munger', 'ngtemplates', 'cssmin', 'concat', 'ngAnnotate', 'uglify', 'copy', 'htmlmin', 'clean:after']);
+    grunt.registerTask('jenkins-build', ['clean:before', 'jshint:jenkins', 'jscs:jenkins', 'less:production', 'dom_munger:read', 'karma:jenkins', 'dom_munger', 'ngtemplates', 'cssmin', 'concat', 'ngAnnotate', 'uglify', 'copy', 'htmlmin', 'clean:after']);
     grunt.registerTask('jenkins-deploy-snapshot', ['jenkins-build', 'maven_deploy:snapshot_dist']);
     grunt.registerTask('jenkins-deploy-release', ['jenkins-build', 'maven_deploy:release_dist']);
 

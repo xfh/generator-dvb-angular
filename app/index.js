@@ -64,15 +64,39 @@ CgangularGenerator.prototype.askFor = function askFor() {
             name: 'appname',
             message: 'What would you like the angular app/module name to be?',
             default: path.basename(process.cwd())
+        },
+        {
+            name: 'groupId',
+            message: 'What is your Maven/Nexus groupId?'
+        },
+        {
+            name: 'artifactId',
+            message: 'What is your Maven/Nexus artifactId?'
+        },
+        {
+            name: 'proxyContext',
+            message: 'What is your REST API context to Proxy to? (e.g. /kitadmin)',
+            validate: function (value) {
+                value = _.str.trim(value);
+                if (value[0] !== '/') {
+                    return 'The context should start with "/"'
+                }
+                if (value[value.length - 1] === '/') {
+                    return 'The context should not end with "/"';
+                }
+                return true;
+            }
         }
     ];
 
     this.prompt(prompts, function (props) {
         this.appname = _.str.camelize(props.appname);
         this.dir = 'src/';
-        this.appJs = this.appname + '.js';
-        this.appLess = this.appname + '.less';
+        this.appLess = 'app.module.less';
         this.nodeModulesDir = path.relative(path.join('.', this.dir), './node_modules');
+        this.groupId = props.groupId;
+        this.artifactId = props.artifactId;
+        this.proxyContext = props.proxyContext;
         cb();
     }.bind(this));
 };
