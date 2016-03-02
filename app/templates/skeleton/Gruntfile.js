@@ -21,7 +21,6 @@ module.exports = function (grunt) {
         connect: {
             options: {
                 port: 9001,
-                base: 'src/',
                 hostname: 'localhost',
                 //hostname: '*', // enable to allow remote access to this server
                 middleware: function (connect, options, middlewares) {
