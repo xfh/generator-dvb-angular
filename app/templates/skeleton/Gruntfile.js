@@ -9,13 +9,6 @@ module.exports = function (grunt) {
     // load all grunt tasks
     require('load-grunt-tasks')(grunt);
 
-    var projectFiles = [{
-        expand: true,
-        cwd: './',
-        dot: true, // include hidden files
-        src: ['**', '!build/**', '!dist/**', '!.idea/**', '!.git/**']
-    }];
-
     // Project configuration.
     grunt.initConfig({
         connect: {
@@ -74,11 +67,12 @@ module.exports = function (grunt) {
                 jshintrc: '.jshintrc'
             },
             main: {
-                src: [globs.createFolderGlobs('*.js')]
+                src: 'src/**/*.js'
             },
             jenkins: {
                 reporter: 'checkstyle',
-                reporterOutput: 'build/checkstyle-result.xml'
+                reporterOutput: 'build/checkstyle-result.xml',
+                src: 'src/**/*.js'
             }
         },
         jscs: {
@@ -87,12 +81,12 @@ module.exports = function (grunt) {
                 verbose: false // If you need output with rule names http://jscs.info/overview.html#verbose
             },
             main: {
-                src: [globs.createFolderGlobs('*.js')]
+                src: 'src/**/*.js'
             },
             jenkins: {
                 reporter: 'junit',
                 reporterOutput: 'build/jscs-results.xml',
-                src: [globs.createFolderGlobs('*.js')]
+                src: 'src/**/*.js'
             }
         },
         clean: {
@@ -145,7 +139,7 @@ module.exports = function (grunt) {
                         {selector: 'link[rel="stylesheet"][data-concat!="false"]', attribute: 'href', writeto: 'appcss'}
                     ]
                 },
-                src: 'src/index.html'
+                src: 'index.html'
             },
             update: {
                 options: {
@@ -155,7 +149,7 @@ module.exports = function (grunt) {
                         {selector: 'head', html: '<link rel="stylesheet" href="app.full.min.css">'}
                     ]
                 },
-                src: 'src/index.html',
+                src: 'index.html',
                 dest: 'dist/index.html'
             }
         },
@@ -289,7 +283,7 @@ module.exports = function (grunt) {
         },
         jsdoc: {
             dist: {
-                src: [globs.createFolderGlobs('*.js')],
+                src: 'src/**/*.js',
                 options: {
                     destination: 'build/doc'
                 }
