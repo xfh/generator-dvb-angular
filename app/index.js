@@ -17,6 +17,7 @@ var CgangularGenerator = module.exports = function CgangularGenerator(args, opti
         this.config.set('partialDirectory', 'partial/');
         this.config.set('modalDirectory', 'partial/');
         this.config.set('directiveDirectory', 'directive/');
+        this.config.set('componentDirectory', 'component/');
         this.config.set('filterDirectory', 'filter/');
         this.config.set('serviceDirectory', 'service/');
         var inject = {

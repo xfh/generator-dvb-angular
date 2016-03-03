@@ -44,10 +44,10 @@ ComponentGenerator.prototype.askFor = function askFor() {
 
 ComponentGenerator.prototype.files = function files() {
 
-    var configName = 'directiveSimpleTemplates';
+    var configName = 'componentSimpleTemplates';
     var defaultDir = 'templates/simple';
     if (this.needpartial) {
-        configName = 'directiveComplexTemplates';
+        configName = 'componentComplexTemplates';
         defaultDir = 'templates/complex';
     }
 
