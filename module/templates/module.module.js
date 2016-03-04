@@ -1,5 +1,5 @@
 (function () {
     'use strict';
 
-    angular.module('<%= appname %>.<%= _.camelize(name) %>', []);
+    angular.module('<%= _.camelize(name) %>', []);
 })();

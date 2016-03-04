@@ -5,7 +5,7 @@ describe('<%= _.camelize(name) %>', function () {
     beforeEach(module('<%= appname %>'));
 
     beforeEach(inject(function (_<%= _.camelize(name) %>_) {
-    <%= _.camelize(name) %> = _<%= _.camelize(name) %>_;
+        <%= _.camelize(name) %> = _<%= _.camelize(name) %>_;
     }));
 
     describe('Public API', function () {
