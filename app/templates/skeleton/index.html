@@ -14,8 +14,6 @@
 <!-- JS from Node Components -->
 <script src="<%= nodeModulesDir %>/jquery/dist/jquery.js"></script>
 <script src="<%= nodeModulesDir %>/bootstrap/dist/js/bootstrap.js"></script>
-<script src="<%= nodeModulesDir %>/angular-moment/node_modules/moment/moment.js"></script>
-<script src="<%= nodeModulesDir %>/angular-moment/angular-moment.js"></script>
 <script src="<%= nodeModulesDir %>/angular/angular.js"></script>
 <script src="<%= nodeModulesDir %>/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="<%= nodeModulesDir %>/angular-animate/angular-animate.js"></script>
@@ -23,10 +21,18 @@
 <script src="<%= nodeModulesDir %>/angular-resource/angular-resource.js"></script>
 <script src="<%= nodeModulesDir %>/angular-sanitize/angular-sanitize.js"></script>
 <script src="<%= nodeModulesDir %>/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
+<script src="<%= nodeModulesDir %>/moment/moment.js"></script>
+<script src="<%= nodeModulesDir %>/angular-moment/angular-moment.js"></script>
 <!-- Add New Node Component JS Above -->
 
 <!-- Main App JS -->
 <script src="src/app.module.js"></script>
+<script src="src/core/core.module.js"></script>
+<script src="src/core/core.route.js"></script>
+<script src="src/core/config.js"></script>
+<script src="src/core/constants.js"></script>
+<script src="src/dvbModules/router/router.module.js"></script>
+<script src="src/dvbModules/router/route-helper-provider.js"></script>
 <!-- Add New Component JS Above -->
 
 <h1>You are now serving an Angular App <i class="fa fa-thumbs-up"></i></h1>
