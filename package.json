@@ -17,8 +17,8 @@
     "Angular"
   ],
   "dependencies": {
-    "yeoman-generator": "^0.21.1",
     "chalk": "^1.0.0",
+    "yeoman-generator": "^0.21.1",
     "yosay": "^1.0.2"
   },
   "devDependencies": {
@@ -26,6 +26,7 @@
     "eslint": "^2.1.0",
     "eslint-config-xo-space": "^0.10.0",
     "gulp": "^3.9.0",
+    "gulp-beautify": "~2.0.0",
     "gulp-eslint": "^2.0.0",
     "gulp-exclude-gitignore": "^1.0.0",
     "gulp-line-ending-corrector": "^1.0.1",
