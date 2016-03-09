@@ -2,8 +2,22 @@
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
+var path = require('path');
 
-module.exports = yeoman.generators.Base.extend({
+var DvbBase = yeoman.generators.Base.extend({
+    copyFile: function (src, dst) {
+        this.fs.copy(this.templatePath(src), this.destinationPath(dst));
+    },
+
+    copyTpl: function (src, dst, ejsParams) {
+        this.fs.copyTpl(this.templatePath(src), this.destinationPath(dst), ejsParams);
+    }
+});
+
+var IndentStyle = {space: 'spaces', tab: 'tabs'};
+
+module.exports = DvbBase.extend({
+
     prompting: function () {
         var done = this.async();
 
@@ -12,12 +26,47 @@ module.exports = yeoman.generators.Base.extend({
             'Welcome to the classy ' + chalk.red('generator-dvb-angular') + ' generator!'
         ));
 
-        var prompts = [{
-            type: 'confirm',
-            name: 'someOption',
-            message: 'Would you like to enable this option?',
-            default: true
-        }];
+        var prompts = [
+            {
+                type: 'input',
+                name: 'appname',
+                message: 'What would you like the angular app/module name to be?',
+                //default: path.basename(process.cwd())
+            },
+            {
+                type: 'list',
+                name: 'indentStyle',
+                message: 'Would you like spaces or tab indentation?',
+                choices: [IndentStyle.space, IndentStyle.tab]
+            },
+            {
+                type: 'input',
+                name: 'directivePrefix',
+                message: 'What is your directive prefix (e.g. <prefix-a-directive></prefix-a-directive>)?',
+                //},
+                //{
+                //    name: 'groupId',
+                //    message: 'What is your Maven/Nexus groupId?'
+                //},
+                //{
+                //    name: 'artifactId',
+                //    message: 'What is your Maven/Nexus artifactId?'
+                //},
+                //{
+                //    name: 'proxyContext',
+                //    message: 'What is your REST API context to Proxy to? (e.g. /kitadmin)',
+                //    validate: function (value) {
+                //        value = _.str.trim(value);
+                //        if (value[0] !== '/') {
+                //            return 'The context should start with "/"'
+                //        }
+                //        if (value[value.length - 1] === '/') {
+                //            return 'The context should not end with "/"';
+                //        }
+                //        return true;
+                //    }
+            }
+        ];
 
         this.prompt(prompts, function (props) {
             this.props = props;
@@ -27,46 +76,42 @@ module.exports = yeoman.generators.Base.extend({
         }.bind(this));
     },
 
+    cofiguring: function () {
+        this.copyFile('.jshintrc', '.jshintrc');
+        this.copyFile('.jshintignore', '.jshintignore');
+        this.copyTpl('.jscsrc', '.jscsrc', {validateIndentation: this.props.indentStyle === IndentStyle.tab ? "\t" : 4});
+        this.copyFile('.gitignore', '.gitignore');
+        this.copyFile('.gitattributes', '.gitattributes');
+
+        this.copyTpl('.editorconfig', '.editorconfig', {indentStyle: this.props.indentStyle === IndentStyle.tab ? 'tab' : 'space'});
+        this.copyTpl('package.json', 'package.json', {appname: this.props.appname});
+
+        this.copyTpl('Gruntfile.js', 'Gruntfile.js', {
+            proxyContext: this.props.proxyContext,
+            appLess: this.props.appLess,
+            groupId: this.props.groupId,
+            artifactId: this.props.artifactId
+        });
+    },
+
     writing: function () {
         var that = this;
 
         //var beautify = require('gulp-beautify');
-        //var formatting = that.indentSyle === 'space' ? {indentSize: 4} : {indentWithTabs: true};
-        //that.registerTransformStream(beautify(formatting));
+        //var formatting = this.props.indentSyle === IndentStyle.tab ? {indentWithTabs: true} : {indentSize: 4};
+        //this.registerTransformStream(beautify(formatting));
 
-        var copyFile = function (src, dst) {
-            that.fs.copy(that.templatePath(src), that.destinationPath(dst));
-        };
-        var copyTpl = function (src, dst, ejsParams) {
-            that.fs.copyTpl(that.templatePath(src), that.destinationPath(dst), ejsParams);
-        };
+        this.copyTpl('index.html', 'index.html', {nodeModulesDir: that.nodeDir, appname: that.appname});
 
-        copyFile('.jshintrc', '.jshintrc');
-        copyFile('.jshintignore', '.jshintignore');
-        copyFile('.jscsrc', '.jscsrc');
-        copyFile('.gitignore', '.gitignore');
-        copyFile('.gitattributes', '.gitattributes');
-
-        copyTpl('.editorconfig', '.editorconfig', {indentStyle: that.indentSyle});
-        copyTpl('package.json', 'package.json', {appname: that.appname});
-        copyTpl('index.html', 'index.html', {nodeModulesDir: that.nodeDir, appname: that.appname});
-
-        copyTpl('src/app.module.js', 'src/app.module.js', {appname: that.appname});
-        copyTpl('src/app.module.less', 'src/app.module.less', {nodeModulesDir: that.nodeDir});
-        copyTpl('src/core/core.module.js', 'src/core/core.module.js', {appname: that.appname});
-        copyFile('src/core/core.module.less', 'src/core/core.module.less');
-        copyTpl('src/core/core.route.js', 'src/core/core.route.js', {appname: that.appname});
-        copyFile('src/core/config.js', 'src/core/config.js');
-        copyFile('src/core/constants.js', 'src/core/constants.js');
-        copyFile('src/dvbModules/router/router.module.js', 'src/dvbModules/router/router.module.js');
-        copyFile('src/dvbModules/router/route-helper-provider.js', 'src/dvbModules/router/route-helper-provider.js');
-
-        copyTpl('Gruntfile.js', 'Gruntfile.js', {
-            proxyContext: that.proxyContext,
-            appLess: that.appLess,
-            groupId: that.groupId,
-            artifactId: that.artifactId
-        });
+        this.copyTpl('src/app.module.js', 'src/app.module.js', {appname: that.appname});
+        this.copyTpl('src/app.module.less', 'src/app.module.less', {nodeModulesDir: that.nodeDir});
+        this.copyTpl('src/core/core.module.js', 'src/core/core.module.js', {appname: that.appname});
+        this.copyFile('src/core/core.module.less', 'src/core/core.module.less');
+        this.copyTpl('src/core/core.route.js', 'src/core/core.route.js', {appname: that.appname});
+        this.copyFile('src/core/config.js', 'src/core/config.js');
+        this.copyFile('src/core/constants.js', 'src/core/constants.js');
+        this.copyFile('src/dvbModules/router/router.module.js', 'src/dvbModules/router/router.module.js');
+        this.copyFile('src/dvbModules/router/route-helper-provider.js', 'src/dvbModules/router/route-helper-provider.js');
     },
 
     install: function () {

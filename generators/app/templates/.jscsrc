@@ -21,7 +21,7 @@
         "allowComments": true,
         "allowRegex": true
     },
-    "validateIndentation": 4,
+    "validateIndentation": <%= validateIndentation %>,
     "validateQuoteMarks": "'",
     "disallowMultipleLineStrings": true,
     "disallowMixedSpacesAndTabs": true,

@@ -6,8 +6,9 @@ var helpers = require('yeoman-generator').test;
 describe('generator-dvb-angular:app', function () {
     before(function (done) {
         helpers.run(path.join(__dirname, '../generators/app'))
-            .withOptions({someOption: true})
-            .withPrompts({someAnswer: true})
+            .withPrompts({appname: 'testApp'})
+            .withPrompts({indentStyle: 'spaces'})
+            .withPrompts({directivePrefix: 'dvb'})
             .on('end', done);
     });
 
