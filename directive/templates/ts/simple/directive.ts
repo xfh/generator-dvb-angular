@@ -19,7 +19,7 @@ module app.<%= _.capitalize(_.camelize(name)) %> {
         }
     }
 
-    export class <%= _.capitalize(_.camelize(name)) %>  {
+    class <%= _.capitalize(_.camelize(name)) %>  {
 
         public static $inject = [];
         /* @ngInject */
