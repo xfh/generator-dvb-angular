@@ -2,7 +2,7 @@
 module app.<%= _.capitalize(_.camelize(name)) %> {
     'use strict';
 
-    export class ComponentConfig implements angular.IComponentOptions {
+    class ComponentConfig implements angular.IComponentOptions {
         transclude: boolean;
         bindings: any;
         templateUrl: string | Function;
@@ -19,7 +19,7 @@ module app.<%= _.capitalize(_.camelize(name)) %> {
     }
 
 
-    export class <%= _.capitalize(_.camelize(name)) %>  {
+    class <%= _.capitalize(_.camelize(name)) %>  {
 
         static $inject = [];
         /* @ngInject */
