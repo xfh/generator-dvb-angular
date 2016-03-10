@@ -30,6 +30,8 @@ ComponentGenerator.prototype.askFor = function askFor() {
         default: true
     }];
 
+    cgUtils.addTypePrompt(this, prompts);
+
     cgUtils.addNamePrompt(this, prompts, 'component');
 
     this.prompt(prompts, function (props) {
@@ -45,10 +47,10 @@ ComponentGenerator.prototype.askFor = function askFor() {
 ComponentGenerator.prototype.files = function files() {
 
     var configName = 'componentSimpleTemplates';
-    var defaultDir = 'templates/simple';
+    var defaultDir = 'templates/' + this.fileType + '/simple';
     if (this.needpartial) {
         configName = 'componentComplexTemplates';
-        defaultDir = 'templates/complex';
+        defaultDir = 'templates/' + this.fileType + '/complex';
     }
 
     this.htmlPath = path.join(this.dir, this.name + '.html').replace(/\\/g, '/');

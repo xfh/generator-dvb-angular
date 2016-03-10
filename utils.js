@@ -281,6 +281,24 @@ exports.addNamePrompt = function (that, prompts, type) {
     }
 };
 
+exports.addTypePrompt = function (that, prompts) {
+    if (!that.name) {
+        prompts.splice(0, 0, {
+            name: 'type',
+            message: 'Do you want to generate Typescript (t) or Javascript (J)',
+            validate: function (input) {
+                if (input.toUpperCase() === 'T') {
+                    that.fileType = 'ts';
+                }
+                else {
+                    that.fileType = 'js';
+                }
+                return true;
+            }
+        });
+    }
+}
+
 exports.getPrimaryModule = function (that) {
     var primary = that.config.get('primaryModule');
     var modules = that.config.get('modules');
