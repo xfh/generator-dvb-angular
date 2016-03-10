@@ -24,6 +24,6 @@ module app.<%= _.capitalize(_.camelize(name)) %> {
         }
     }
 
-    angular.module('<%= appname %>').component('<%= _.capitalize(_.camelize(name)) %>', new ComponentConfig());
+    angular.module('<%= appname %>').component('<%= _.camelize(name) %>', new ComponentConfig());
 
 }
