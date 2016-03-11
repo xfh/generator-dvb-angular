@@ -1,11 +1,10 @@
 (function () {
     'use strict';
 
-    angular
-        .module('<%= _.camelize(name) %>').run(<%= _.camelize(_.replaceAll(name, '.', '')) + 'Run' %>);
+    angular.module('<%= _.camelize(name) %>').run(appRun);
 
     /* @ngInject */
-    function <%= _.camelize(_.replaceAll(name, '.', '')) + 'Run' %>(routerHelper) {
+    function appRun(routerHelper) {
         routerHelper.configureStates(getStates());
     }
 

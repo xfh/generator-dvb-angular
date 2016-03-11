@@ -1,5 +1,5 @@
 (function () {
-    'usse strict';
+    'use strict';
 
     angular.module('<%= appname %>').controller('<%= ctrlname %>', <%= ctrlname %>);
 

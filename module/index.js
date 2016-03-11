@@ -44,6 +44,8 @@ ModuleGenerator.prototype.askFor = function askFor() {
         }
     ];
 
+    cgUtils.addTypePrompt(this, prompts);
+
     cgUtils.addNamePrompt(this, prompts, 'module');
 
     this.prompt(prompts, function (props) {
@@ -62,7 +64,9 @@ ModuleGenerator.prototype.files = function files() {
     module.save();
     this.log.writeln(chalk.green(' updating') + ' %s', path.basename(module.file));
 
-    cgUtils.processTemplates(this.name, this.dir, 'module', this, null, null, module);
+    var defaultDir = 'templates/' + this.fileType;
+
+    cgUtils.processTemplates(this.name, this.dir, 'module', this, defaultDir, null, module);
 
     var modules = this.config.get('modules');
     if (!modules) {
