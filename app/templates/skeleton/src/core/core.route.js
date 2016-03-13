@@ -2,10 +2,11 @@
     'use strict';
 
     angular
-        .module('<%= appname %>.core').run(appRun);
+        .module('<%= appname %>.core').run(runBlock);
 
+    runBlock.$inject = ['routerHelper'];
     /* @ngInject */
-    function appRun(routerHelper) {
+    function runBlock(routerHelper) {
         routerHelper.configureStates(getStates());
     }
 
