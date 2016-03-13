@@ -1,11 +1,14 @@
 (function () {
     'use strict';
 
-    var directiveConfig = {
-        restrict: 'A'
-    };
-
     angular.module('<%= appname %>').directive('<%= _.camelize(name) %>', directiveConfig);
 
-    <%= _.camelize(name) %>.$inject = [];
+    function <%= _.camelize(name) %>() {
+        //noinspection UnnecessaryLocalVariableJS
+        var directive = {
+            restrict: 'A'
+        };
+
+        return directive;
+    }
 })();
