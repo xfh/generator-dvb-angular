@@ -23,6 +23,8 @@ ModalGenerator.prototype.askFor = function askFor() {
 
     var prompts = [];
 
+    cgUtils.addTypePrompt(this, prompts);
+
     cgUtils.addNamePrompt(this,prompts,'modal');
 
     this.prompt(prompts, function (props) {
@@ -37,8 +39,9 @@ ModalGenerator.prototype.askFor = function askFor() {
 ModalGenerator.prototype.files = function files() {
 
     this.ctrlname = _.camelize(_.classify(this.name)) + 'Ctrl';
+    var defaultDir = 'templates/' + this.fileType;
 
-    cgUtils.processTemplates(this.name,this.dir,'modal',this,null,null,this.module);
+    cgUtils.processTemplates(this.name,this.dir,'modal',this,defaultDir,null,this.module);
 
     setTimeout((function(){
 

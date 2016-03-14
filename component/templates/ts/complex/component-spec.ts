@@ -1,4 +1,4 @@
-/// <reference path="../../../../typings/browser.d.ts" />
+/// <reference path="../../../typings/browser.d.ts" />
 describe('<%= _.camelize(name) %>', function () {
 
     beforeEach(angular.mock.module('<%= appname %>'));
