@@ -2,16 +2,26 @@
 module app.<%= _.capitalize(_.camelize(name)) %> {
     'use strict';
 
-    angular.module('<%= _.camelize(name) %>').run(appRun);
 
-    /* @ngInject */
-    function appRun(routerHelper: any) {
-        routerHelper.configureStates(getStates());
+    export class <%= _.capitalize(_.camelize(name)) %> {
+        static $inject = [];
+        /* @ngInject */
+        constructor() {
+        }
+
+        public getStates(): Array<angular.ui.IState> {
+            return [
+                /* Add New States Above */
+            ];
+        }
+
+        public static instance() : <%= _.capitalize(_.camelize(name)) %> {
+            return new <%= _.capitalize(_.camelize(name)) %>();
+        }
+
     }
 
-    function getStates() {
-        return [
-            /* Add New States Above */
-        ];
-    }
+    angular.module('<%= _.camelize(name) %>').run(<%= _.capitalize(_.camelize(name)) %>.instance);
+
+
 }
