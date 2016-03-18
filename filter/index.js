@@ -12,10 +12,9 @@ _.mixin(_.str.exports());
 
 var FilterGenerator = module.exports = function FilterGenerator(args, options, config) {
 
-    cgUtils.getNameArg(this,args);
+    cgUtils.getNameArg(this, args);
 
     yeoman.Base.apply(this, arguments);
-
 };
 
 util.inherits(FilterGenerator, yeoman.Base);
@@ -27,22 +26,19 @@ FilterGenerator.prototype.askFor = function askFor() {
 
     cgUtils.addTypePrompt(this, prompts);
 
-    cgUtils.addNamePrompt(this,prompts,'filter');
+    cgUtils.addNamePrompt(this, prompts, 'filter');
 
     this.prompt(prompts, function (props) {
-        if (props.name){
+        if (props.name) {
             this.name = props.name;
         }
-        cgUtils.askForModuleAndDir('filter',this,false,cb);
+        cgUtils.askForModuleAndDir('filter', this, false, cb);
     }.bind(this));
-
-
 };
 
 FilterGenerator.prototype.files = function files() {
 
     var defaultDir = 'templates/' + this.fileType;
 
-    cgUtils.processTemplates(this.name,this.dir,'filter',this, defaultDir ,null,this.module);
-
+    cgUtils.processTemplates(this.name, this.dir, 'filter', this, defaultDir, null, this.module);
 };

@@ -255,7 +255,7 @@ module.exports = function (grunt) {
         maven_deploy: { // jshint ignore:line
             options: {
                 groupId: '<%= groupId %>',
-                artifactId: '<=% artifactId %>',
+                artifactId: '<%= artifactId %>',
                 packaging: 'tgz',
                 version: pkg.version,
                 goal: 'deploy'
@@ -265,7 +265,7 @@ module.exports = function (grunt) {
                     url: 'http://nexus/nexus/content/repositories/dvb.snapshots/',
                     repositoryId: 'dvb.snapshots',
                     file: function () {
-                        return 'build/<=% artifactId =>-' + pkg.version + '-dist.tgz';
+                        return 'build/<%= artifactId %>-' + pkg.version + '-dist.tgz';
                     }
                 },
                 files: [{expand: true, cwd: 'dist/', src: '**'}]
@@ -275,7 +275,7 @@ module.exports = function (grunt) {
                     url: 'http://nexus/nexus/content/repositories/dvb/',
                     repositoryId: 'dvb',
                     file: function () {
-                        return 'build/<=% artifactId =>-' + pkg.version + '-dist.tgz';
+                        return 'build/<%= artifactId %>-' + pkg.version + '-dist.tgz';
                     }
                 },
                 files: [{expand: true, cwd: 'dist/', src: '**'}]

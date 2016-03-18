@@ -1,10 +1,12 @@
 (function () {
     'use strict';
 
-    angular.module('<%= _.camelize(name) %>').run(appRun);
+    angular
+        .module('<%= _.camelize(name) %>').run(runBlock);
 
+    runBlock.$inject = ['routerHelper'];
     /* @ngInject */
-    function appRun(routerHelper) {
+    function runBlock(routerHelper) {
         routerHelper.configureStates(getStates());
     }
 
