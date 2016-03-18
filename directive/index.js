@@ -30,8 +30,6 @@ DirectiveGenerator.prototype.askFor = function askFor() {
         default: true
     }];
 
-    cgUtils.addTypePrompt(this, prompts);
-
     cgUtils.addNamePrompt(this, prompts, 'directive');
 
     this.prompt(prompts, function (props) {
@@ -45,12 +43,13 @@ DirectiveGenerator.prototype.askFor = function askFor() {
 };
 
 DirectiveGenerator.prototype.files = function files() {
+    var fileType = cgUtils.getFileType(this);
 
     var configName = 'directiveSimpleTemplates';
-    var defaultDir = 'templates/' + this.fileType + '/simple';
+    var defaultDir = 'templates/' + fileType + '/simple';
     if (this.needpartial) {
         configName = 'directiveComplexTemplates';
-        defaultDir = 'templates/' + this.fileType + '/complex';
+        defaultDir = 'templates/' + fileType + '/complex';
     }
 
     this.htmlPath = path.join(this.dir, this.name + '.html').replace(/\\/g, '/');

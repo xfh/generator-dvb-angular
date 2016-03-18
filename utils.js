@@ -285,7 +285,7 @@ exports.addTypePrompt = function (that, prompts) {
     if (!that.name) {
         prompts.splice(0, 0, {
             name: 'type',
-            message: 'Do you want to generate Typescript (t) or Javascript (J)',
+            message: 'Do you want to generate Typescript (t) or Javascript (j)',
             validate: function (input) {
                 if (input.toUpperCase() === 'T') {
                     that.fileType = 'ts';
@@ -297,7 +297,11 @@ exports.addTypePrompt = function (that, prompts) {
             }
         });
     }
-}
+};
+
+exports.getFileType = function (that) {
+    return that.config.get('fileType') || 'js';
+};
 
 exports.getPrimaryModule = function (that) {
     var primary = that.config.get('primaryModule');

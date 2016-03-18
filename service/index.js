@@ -25,7 +25,6 @@ ServiceGenerator.prototype.askFor = function askFor() {
 
     var prompts = [];
 
-    cgUtils.addTypePrompt(this, prompts);
     cgUtils.addNamePrompt(this, prompts, 'service');
 
     this.prompt(prompts, function (props) {
@@ -38,7 +37,8 @@ ServiceGenerator.prototype.askFor = function askFor() {
 };
 
 ServiceGenerator.prototype.files = function files() {
-    var defaultDir = 'templates/' + this.fileType;
+    var fileType = cgUtils.getFileType(this);
+    var defaultDir = 'templates/' + fileType;
 
     cgUtils.processTemplates(this.name, this.dir, 'service', this, defaultDir, null, this.module);
 

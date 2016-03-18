@@ -24,8 +24,6 @@ FilterGenerator.prototype.askFor = function askFor() {
 
     var prompts = [];
 
-    cgUtils.addTypePrompt(this, prompts);
-
     cgUtils.addNamePrompt(this, prompts, 'filter');
 
     this.prompt(prompts, function (props) {
@@ -37,8 +35,8 @@ FilterGenerator.prototype.askFor = function askFor() {
 };
 
 FilterGenerator.prototype.files = function files() {
-
-    var defaultDir = 'templates/' + this.fileType;
+    var fileType = cgUtils.getFileType(this);
+    var defaultDir = 'templates/' + fileType;
 
     cgUtils.processTemplates(this.name, this.dir, 'filter', this, defaultDir, null, this.module);
 };

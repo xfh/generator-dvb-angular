@@ -37,6 +37,7 @@ var CgangularGenerator = module.exports = function CgangularGenerator(args, opti
         var coreModuleName = primaryModuleName + '.core';
         this.config.set('inject', inject);
         this.config.set('primaryModule', primaryModuleName);
+        this.config.set('fileType', this.fileType);
         var modules = [
             {
                 name: primaryModuleName,

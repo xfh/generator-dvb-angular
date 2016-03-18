@@ -6,7 +6,6 @@ var fs = require('fs');
 var cgUtils = require('../utils.js');
 var _ = require('underscore');
 var chalk = require('chalk');
-var fs = require('fs');
 var url = require('url');
 
 _.str = require('underscore.string');
@@ -45,8 +44,6 @@ PartialGenerator.prototype.askFor = function askFor() {
         }
     ];
 
-    cgUtils.addTypePrompt(this, prompts);
-
     cgUtils.addNamePrompt(this, prompts, 'partial');
 
     this.prompt(prompts, function (props) {
@@ -63,10 +60,10 @@ PartialGenerator.prototype.askFor = function askFor() {
 };
 
 PartialGenerator.prototype.files = function files() {
-
+    var fileType = cgUtils.getFileType(this);
     this.ctrlname = _.camelize(_.classify(this.name)) + 'Controller';
     this.controllerAs = _.camelize(this.name) + 'Ctrl';
-    var defaultDir = 'templates/' + this.fileType;
+    var defaultDir = 'templates/' + fileType;
 
     cgUtils.processTemplates(this.name, this.dir, 'partial', this, defaultDir, null, this.module);
 
