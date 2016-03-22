@@ -70,7 +70,7 @@ ModuleGenerator.prototype.files = function files() {
     if (!modules) {
         modules = [];
     }
-    modules.push({name: _.camelize(this.name), file: path.join(this.dir, this.name + '.module.js')});
+    modules.push({name: _.camelize(this.name), file: path.join(this.dir, this.name + '.module.' + fileType)});
     this.config.set('modules', modules);
     this.config.save();
 };

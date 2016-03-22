@@ -71,7 +71,8 @@ exports.inject = function (filename, that, module) {
     }
     var config = that.config.get('inject')[ext];
     if (config) {
-        var configFile = _.template(config.file)({module: path.basename(module.file, '.js')});
+        var fileType = exports.getFileType(that);
+        var configFile = _.template(config.file)({module: path.basename(module.file, '.' + fileType)});
         var injectFileRef = filename;
         if (config.relativeToModule) {
             configFile = path.join(path.dirname(module.file), configFile);
