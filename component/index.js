@@ -43,12 +43,12 @@ ComponentGenerator.prototype.askFor = function askFor() {
 };
 
 ComponentGenerator.prototype.files = function files() {
-
+    var fileType = cgUtils.getFileType(this);
     var configName = 'componentSimpleTemplates';
-    var defaultDir = 'templates/simple';
+    var defaultDir = 'templates/' + fileType + '/simple';
     if (this.needpartial) {
         configName = 'componentComplexTemplates';
-        defaultDir = 'templates/complex';
+        defaultDir = 'templates/' + fileType + '/complex';
     }
 
     this.htmlPath = path.join(this.dir, this.name + '.html').replace(/\\/g, '/');

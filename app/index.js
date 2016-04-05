@@ -37,6 +37,7 @@ var CgangularGenerator = module.exports = function CgangularGenerator(args, opti
         var coreModuleName = primaryModuleName + '.core';
         this.config.set('inject', inject);
         this.config.set('primaryModule', primaryModuleName);
+        this.config.set('fileType', this.fileType);
         var modules = [
             {
                 name: primaryModuleName,
@@ -90,6 +91,8 @@ CgangularGenerator.prototype.askFor = function askFor() {
         }
     ];
 
+    cgUtils.addTypePrompt(this, prompts);
+
     this.prompt(prompts, function (props) {
         this.appname = _.str.camelize(props.appname);
         this.dir = 'src/';
@@ -103,5 +106,5 @@ CgangularGenerator.prototype.askFor = function askFor() {
 };
 
 CgangularGenerator.prototype.app = function app() {
-    this.directory('skeleton/', './');
+    this.directory('skeleton/' + this.fileType, './');
 };

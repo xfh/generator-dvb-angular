@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html ng-app="<%= appname %>">
+<head>
+    <base href="/">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <link href="temp/app.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Livereload script for development only (stripped during dist build) -->
+<script src="http://localhost:35729/livereload.js" data-concat="false"></script>
+
+<!-- JS from Node Components -->
+<script src="<%= nodeModulesDir %>/jquery/dist/jquery.js"></script>
+<script src="<%= nodeModulesDir %>/bootstrap/dist/js/bootstrap.js"></script>
+<script src="<%= nodeModulesDir %>/angular/angular.js"></script>
+<script src="<%= nodeModulesDir %>/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="<%= nodeModulesDir %>/angular-animate/angular-animate.js"></script>
+<script src="<%= nodeModulesDir %>/angular-cookies/angular-cookies.js"></script>
+<script src="<%= nodeModulesDir %>/angular-resource/angular-resource.js"></script>
+<script src="<%= nodeModulesDir %>/angular-sanitize/angular-sanitize.js"></script>
+<script src="<%= nodeModulesDir %>/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
+<script src="<%= nodeModulesDir %>/moment/moment.js"></script>
+<script src="<%= nodeModulesDir %>/angular-moment/angular-moment.js"></script>
+<!-- Add New Node Component JS Above -->
+
+<!-- Main App JS -->
+<script src="temp/src.js"></script>
+<!-- Add New Component JS Above -->
+
+<h1>You are now serving an Angular App <i class="fa fa-thumbs-up"></i></h1>
+<div>
+    <div id="content" class="container">
+        <div ui-view></div>
+    </div>
+</div>
+
+</body>
+</html>

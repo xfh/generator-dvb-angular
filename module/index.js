@@ -56,19 +56,21 @@ ModuleGenerator.prototype.askFor = function askFor() {
 };
 
 ModuleGenerator.prototype.files = function files() {
-
+    var fileType = cgUtils.getFileType(this);
     var module = cgUtils.getParentModule(this, path.join(this.dir, '..'));
     module.dependencies.modules.push(_.camelize(this.name));
     module.save();
     this.log.writeln(chalk.green(' updating') + ' %s', path.basename(module.file));
 
-    cgUtils.processTemplates(this.name, this.dir, 'module', this, null, null, module);
+    var defaultDir = 'templates/' + fileType;
+
+    cgUtils.processTemplates(this.name, this.dir, 'module', this, defaultDir, null, module);
 
     var modules = this.config.get('modules');
     if (!modules) {
         modules = [];
     }
-    modules.push({name: _.camelize(this.name), file: path.join(this.dir, this.name + '.module.js')});
+    modules.push({name: _.camelize(this.name), file: path.join(this.dir, this.name + '.module.' + fileType)});
     this.config.set('modules', modules);
     this.config.save();
 };

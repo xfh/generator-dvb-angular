@@ -71,7 +71,8 @@ exports.inject = function (filename, that, module) {
     }
     var config = that.config.get('inject')[ext];
     if (config) {
-        var configFile = _.template(config.file)({module: path.basename(module.file, '.js')});
+        var fileType = exports.getFileType(that);
+        var configFile = _.template(config.file)({module: path.basename(module.file, '.' + fileType)});
         var injectFileRef = filename;
         if (config.relativeToModule) {
             configFile = path.join(path.dirname(module.file), configFile);
@@ -279,6 +280,28 @@ exports.addNamePrompt = function (that, prompts, type) {
             }
         });
     }
+};
+
+exports.addTypePrompt = function (that, prompts) {
+    if (!that.name) {
+        prompts.splice(0, 0, {
+            name: 'type',
+            message: 'Do you want to generate Typescript (t) or Javascript (j)',
+            validate: function (input) {
+                if (input.toUpperCase() === 'T') {
+                    that.fileType = 'ts';
+                }
+                else {
+                    that.fileType = 'js';
+                }
+                return true;
+            }
+        });
+    }
+};
+
+exports.getFileType = function (that) {
+    return that.config.get('fileType') || 'js';
 };
 
 exports.getPrimaryModule = function (that) {

@@ -35,10 +35,11 @@ ModalGenerator.prototype.askFor = function askFor() {
 };
 
 ModalGenerator.prototype.files = function files() {
-
+    var fileType = cgUtils.getFileType(this);
     this.ctrlname = _.camelize(_.classify(this.name)) + 'Ctrl';
+    var defaultDir = 'templates/' + fileType;
 
-    cgUtils.processTemplates(this.name, this.dir, 'modal', this, null, null, this.module);
+    cgUtils.processTemplates(this.name, this.dir, 'modal', this, defaultDir, null, this.module);
 
     setTimeout((function () {
 

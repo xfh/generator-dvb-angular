@@ -43,12 +43,13 @@ DirectiveGenerator.prototype.askFor = function askFor() {
 };
 
 DirectiveGenerator.prototype.files = function files() {
+    var fileType = cgUtils.getFileType(this);
 
     var configName = 'directiveSimpleTemplates';
-    var defaultDir = 'templates/simple';
+    var defaultDir = 'templates/' + fileType + '/simple';
     if (this.needpartial) {
         configName = 'directiveComplexTemplates';
-        defaultDir = 'templates/complex';
+        defaultDir = 'templates/' + fileType + '/complex';
     }
 
     this.htmlPath = path.join(this.dir, this.name + '.html').replace(/\\/g, '/');

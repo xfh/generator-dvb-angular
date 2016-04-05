@@ -15,7 +15,6 @@ var FilterGenerator = module.exports = function FilterGenerator(args, options, c
     cgUtils.getNameArg(this, args);
 
     yeoman.Base.apply(this, arguments);
-
 };
 
 util.inherits(FilterGenerator, yeoman.Base);
@@ -33,12 +32,11 @@ FilterGenerator.prototype.askFor = function askFor() {
         }
         cgUtils.askForModuleAndDir('filter', this, false, cb);
     }.bind(this));
-
-
 };
 
 FilterGenerator.prototype.files = function files() {
+    var fileType = cgUtils.getFileType(this);
+    var defaultDir = 'templates/' + fileType;
 
-    cgUtils.processTemplates(this.name, this.dir, 'filter', this, null, null, this.module);
-
+    cgUtils.processTemplates(this.name, this.dir, 'filter', this, defaultDir, null, this.module);
 };
